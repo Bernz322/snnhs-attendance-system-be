@@ -99,7 +99,7 @@ const deleteUser = async (req, res) => {
         if (!foundUser) return res.status(404).json({ message: "RFID not found!" })
 
         await User.destroy({ where: { RFID: userRFID } })
-        res.json({ message: "User deleted successfully." })
+        res.json({ rfid: userRFID })
 
     } catch (error) {
         res.status(500).json({ message: "Deleting user failed", error })
