@@ -28,9 +28,17 @@ const fetchUserByRFID = async (req, res) => {
     }
 }
 
-async function isUnique(RFID) {
+async function isUniqueRFID(RFID) {
     const exists = await User.findOne({
         where: { RFID }
+    })
+    if (exists) return false
+    return true
+}
+
+async function isUniqueEmail(email) {
+    const exists = await User.findOne({
+        where: { email }
     })
     if (exists) return false
     return true
@@ -39,10 +47,15 @@ async function isUnique(RFID) {
 const addUser = async (req, res) => {
     const { rfid, name, email, password, phone, grade_level } = req.body
 
-    const uniqueRFID = await isUnique(rfid)
+    const uniqueRFID = await isUniqueRFID(rfid)
+    const uniqueEmail = await isUniqueEmail(email)
 
     if (!uniqueRFID) {
         return res.status(400).json({ message: "RFID already exist." })
+    }
+
+    if (!uniqueEmail) {
+        return res.status(400).json({ message: "Email already exist." })
     }
 
     try {
@@ -69,9 +82,16 @@ const updateUser = async (req, res) => {
     try {
         // Check if the newRFID we will put to the user already exist
         if (rfid) {
-            const newRFID = await isUnique(rfid)
+            const newRFID = await isUniqueRFID(rfid)
             if (!newRFID) {
                 return res.status(400).json({ message: "RFID already exist." })
+            }
+        }
+
+        if (email) {
+            const uniqueEmail = await isUniqueEmail(email)
+            if (!uniqueEmail) {
+                return res.status(400).json({ message: "Email already exist." })
             }
         }
 
