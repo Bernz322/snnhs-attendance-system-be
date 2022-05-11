@@ -1,4 +1,4 @@
-const { User, AttendanceRecord } = require('../models')
+const { User } = require('../models')
 
 const fetchAllUsers = async (req, res) => {
     try {
@@ -17,7 +17,6 @@ const fetchUserByRFID = async (req, res) => {
         const foundUser = await User.findOne({
             where: { RFID: userRFID },
             attributes: { exclude: ['password'] },
-            include: [{ model: AttendanceRecord }]
         })
 
         if (!foundUser) return res.status(404).json({ message: "User with that RFID is not found." })
