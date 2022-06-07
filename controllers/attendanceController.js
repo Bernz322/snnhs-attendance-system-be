@@ -1,3 +1,5 @@
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 const { User, AttendanceRecord } = require('../models')
 
 const createAttendance = async (req, res) => {
@@ -33,4 +35,23 @@ const fetchAttendanceByRFID = async (req, res) => {
     }
 }
 
-module.exports = { createAttendance, fetchAttendanceByRFID }
+const fetchDayAttendance = async (req, res) => {
+    const TODAY_START = new Date().setHours(0, 0, 0, 0);
+    const NOW = new Date();
+    try {
+        const attendanceDayCount = await AttendanceRecord.findAll({
+            where: {
+                createdAt: {
+                    [Op.gt]: TODAY_START,
+                    [Op.lt]: NOW
+                },
+            }
+        })
+        res.status(200).json(attendanceDayCount)
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Fetching today's attendance count failed." })
+    }
+}
+
+module.exports = { createAttendance, fetchAttendanceByRFID, fetchDayAttendance }
