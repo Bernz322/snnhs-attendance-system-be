@@ -30,7 +30,7 @@
     <li>Hi-Link AC-DC Step-Down PSU</li>
 </ul>
 
-### Contributors
+### Co-Researchers & Contributors
 
 <ul>
     <a href="https://github.com/rabucejojr" target="_blank" rel='noreferrer'><li>Roger Abucejo Jr.</li></a>
